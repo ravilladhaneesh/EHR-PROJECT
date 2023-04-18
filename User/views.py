@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegisterForm, PatientSignUpForm
+from .forms import UserRegisterForm, PatientSignUpForm, DoctorSignUpForm
 from django.contrib import messages
 from django.contrib.auth import login
 from django.views.generic import CreateView
 from .models import User
 from django.contrib.auth.decorators import login_required
-from .decorators import patient_required
+from .decorators import patient_required, doctor_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -48,18 +50,23 @@ class PatientSignUpView(CreateView):
 def book_appointment(request):
     return render(request, 'User/home.html')
 
-# class DoctorSignUpView(CreateView):
-#     model = User
-#     form_class = DoctorSignUpForm
-#     context_object_name = 'form'
-#     template_name = "User/register.html"
+
+
+@method_decorator(login_required, name="dispatch")
+@method_decorator(doctor_required, name="dispatch")
+class DoctorSignUpView(  CreateView):
+    model = User
+    form_class = DoctorSignUpForm
+    context_object_name = 'form'
+    template_name = "User/register.html"
+    # success_url = "/"
+
+    def get_context_data(self, **kwargs):
+        kwargs["user_type"] = 'doctor'
+        return super().get_context_data(**kwargs)
+
     
-
-#     def get_context_data(self, **kwargs):
-#         kwargs["user_type"] = 'doctor'
-#         return super().get_context_data(**kwargs)
-
-#     def form_valid(self,form):
-#         user = form.save()
-#         login(self.request, user)
-#         return redirect('main-home')
+    def form_valid(self,form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('main-home')

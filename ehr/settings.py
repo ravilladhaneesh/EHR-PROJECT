@@ -130,3 +130,5 @@ AUTH_USER_MODEL = "User.User"
 CRISPY_TEMPLATE_PACK = 'bootstrap5' 
 
 LOGIN_REDIRECT_URL = "main-home"
+
+LOGIN_URL = "login"

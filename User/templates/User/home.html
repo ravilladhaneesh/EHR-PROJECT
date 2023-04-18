@@ -29,6 +29,7 @@
                                     {% if user.is_authenticated %}
                                         {% if user.is_superuser %}
                                             <a class="nav-item nav-link" href="#">Dashboard</a>
+                                            <a class="nav-item nav-link" href="{% url 'doctor-signup'%}">Add Doctor</a>
                                         {% elif user.is_patient %}
                                             <a class="nav-item nav-link" href="{%url 'book-appointment' %}">Appointment</a>
                                         {% elif user.is_doctor %}
