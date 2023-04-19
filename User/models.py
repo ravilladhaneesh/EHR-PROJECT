@@ -37,3 +37,13 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f'{self.doctor_name}'
+
+
+class Appointment(models.Model):
+    
+    doctor_name = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.TimeField()
+
+    def __str__(self):
+        return f' {self.doctor_name}'

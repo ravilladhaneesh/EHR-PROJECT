@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Patient, Doctor
+from .models import User, Patient, Doctor, Appointment
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
@@ -27,7 +27,7 @@ class PatientSignUpForm(UserCreationForm):
         user.is_patient = True
         user.save()
 
-        pat_name = self.cleaned_data.get("patient_name")
+        pat_name = self.cleaned_data.get("username")
         pat_age = self.cleaned_data.get("age")
         pat_gender = self.cleaned_data.get("gender")
         # patient = Patient.objects.create(patient_name=user)
@@ -66,3 +66,26 @@ class DoctorSignUpForm(UserCreationForm):
         doc_record.save()
 
         return user
+    
+
+class AppointmentForm(forms.Form):
+
+    
+    doctor_name = forms.CharField(max_length=20)
+    date = forms.DateField()
+    time = forms.TimeField()
+
+    class Meta:
+        model = Appointment
+
+    def save(self):
+        data = self.cleaned_data
+
+        doc_name = data["doctor_name"]
+        print("----------------------------",doc_name)
+        app_date = data["date"]
+        app_time = data["time"]
+        doc_obj = Doctor.objects.get(pk=doc_name)
+        print("----------------------",doc_obj)
+        appointment_record = Appointment(doctor_name=doc_obj, date=app_date, time=app_time)
+        appointment_record.save()
