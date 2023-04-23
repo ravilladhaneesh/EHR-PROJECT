@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm, PatientSignUpForm, DoctorSignUpForm, AppointmentForm
+from .forms import UserRegisterForm, PatientSignUpForm, DoctorSignUpForm, AppointmentForm, ConsultForm
 from django.contrib import messages
 from django.contrib.auth import login
 from django.views.generic import CreateView
@@ -7,8 +7,8 @@ from .models import User
 from django.contrib.auth.decorators import login_required
 from .decorators import patient_required, admin_required, doctor_required
 from django.utils.decorators import method_decorator
-from .models import Doctor, Patient, Appointment
-from django.views.generic import DetailView, ListView
+from .models import Doctor, Patient, Appointment, Consult
+from django.views.generic import DetailView, ListView , View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
 
@@ -21,17 +21,17 @@ def home(request):
     return render(request, 'User/doctors.html', context)
 
 
-def register(request):
-    if request.method =="POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request,f'Account created for {username}')
-            return redirect('main-home')
-    else:
-        form = UserRegisterForm()
-        return render(request, 'User/register.html', {"form": form})
+# def register(request):
+#     if request.method =="POST":
+#         form = UserRegisterForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.success(request,f'Account created for {username}')
+#             return redirect('main-home')
+#     else:
+#         form = UserRegisterForm()
+#         return render(request, 'User/register.html', {"form": form})
 
 
 class PatientSignUpView(CreateView):
@@ -46,7 +46,7 @@ class PatientSignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self,form):
-        user = form.save()
+        form.save()
         messages.success(self.request, f"Created Account for {form.cleaned_data.get('username')}")
         # login(self.request, user)
         return redirect('login')
@@ -146,3 +146,30 @@ def appointment_patient(request):
 class AppointmentDetialView(LoginRequiredMixin , DetailView):
     model =  Appointment
     
+
+@login_required    
+def profile(request):
+    return render(request, 'User/profile.html')
+
+
+@login_required
+@doctor_required
+def consult_patient(request):
+    if request.method == "POST":
+        form = ConsultForm(request.POST, request.FILES)
+        file = request.FILES["file"]
+        
+        if form.is_valid():
+            
+            file = request.FILES["file"]
+            msg = form.save(request)
+            pat_name = form.cleaned_data.get("patient_name")
+            doc_name = form.cleaned_data.get("doctor_name")
+            messages.success(request, msg)
+            return redirect('appointment-patient')
+        
+    else:
+        form = ConsultForm()
+
+    return render(request, "User/consult.html", {"form": form})
+        

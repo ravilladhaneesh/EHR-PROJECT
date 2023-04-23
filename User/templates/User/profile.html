@@ -1,0 +1,13 @@
+{% extends 'User/home.html'%}
+{% block contents%}
+    <div class="content-section">
+        <div class="media">
+        <img class="rounded-circle mx-1  border border-info account-img" style="width:75px; height:75px;" src="{{ user.profile.image.url}}">
+        <div class="media-body">
+            <h2 class="account-heading">{{user.username}}</h2>
+            <p class="text-secondary">{{user.email}}</p>
+        </div>
+        </div>
+        <!-- FORM HERE -->
+    </div>
+{% endblock contents %}

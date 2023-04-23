@@ -17,16 +17,18 @@ from django.contrib import admin
 from django.urls import path, include
 from User import views as user_views
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",user_views.home, name='main-home'),
-    # path("register/", user_views.register, name='register'),
     path("register/patient", user_views.PatientSignUpView.as_view(), name="patient-signup"),
     path('login/',auth_views.LoginView.as_view(template_name="User/login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(template_name="User/logout.html"), name="logout"),
+    path('profile', user_views.profile, name='profile'),
     path("appointment_patient/" , user_views.appointment_patient, name='appointment-patient'),
-    # path('appointment_patient/', user_views.Appointment_patient.as_view(), name='appointment-patient'),
     path('appointment/', user_views.book_appointment, name="book-appointment"),
     path('register/doctor', user_views.DoctorSignUpView.as_view() , name="doctor-signup"),
     path('dashboard/', user_views.dashboard, name='dashboard'),
@@ -35,6 +37,11 @@ urlpatterns = [
     path('view_appointments/', user_views.view_appointments, name="view-appointments"),
     path('doctor/<str:pk>', user_views.DoctorDetailView.as_view(), name="doctor-detail"),
     path('patient/<str:pk>', user_views.AppointmentDetialView.as_view(), name="appointment-detail"),
+    # path("consult/", user_views.ConsultCreateView.as_view(), name='consult-patient'),
+    path("consult/", user_views.consult_patient, name='consult-patient'),
 ]
 
 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Patient, Doctor, Appointment
+from .models import User, Patient, Doctor, Appointment, Consult
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
@@ -25,6 +25,7 @@ class PatientSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_patient = True
+        user.email = self.cleaned_data.get("email")
         user.save()
 
         pat_name = self.cleaned_data.get("username")
@@ -53,6 +54,7 @@ class DoctorSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.is_doctor = True
+        user.email = self.cleaned_data.get("email")
         user.save()
         
         doc_name = self.cleaned_data.get("username")
@@ -103,7 +105,58 @@ class AppointmentForm(forms.Form):
         app_date = data["date"]
         app_time = data["time"]
         doc_obj = Doctor.objects.get(pk=doc_name)
-        print("-------------------------------------------------",self.user)
+        # print("-------------------------------------------------",self.user.username)
         
-        appointment_record = Appointment(patient_name=self.user, doctor_name=doc_obj, date=app_date, time=app_time)
+        pat_obj = Patient.objects.get(pk=self.user.username)
+        # print("------------------------------------------------------------------------",pat_obj)
+        appointment_record = Appointment(patient_name=pat_obj, doctor_name=doc_obj, date=app_date, time=app_time)
         appointment_record.save()
+
+
+
+class ConsultForm(forms.Form):
+
+    patient_name = forms.CharField(max_length=20)
+    doctor_name = forms.CharField(max_length=20)
+    description = forms.CharField(max_length=500)
+    tablets = forms.CharField(max_length=100)
+    tests = forms.CharField(max_length=100)
+    file = forms.FileField()
+
+    class Meta:
+        model = Consult 
+        # fields = ['doctor_name', 'patient_name', 'tablets', 'tests',  'description', 'file']
+
+    
+    def save(self, request):
+        # doc_name = self.user.username
+        
+        data = self.cleaned_data
+
+        pat_name = data["patient_name"]
+        doc_name = data["doctor_name"]
+        desc = data["description"]
+        tabs = data["tablets"]
+        test = data["tests"]
+        fp = data["file"]
+
+        pat_obj = Patient.objects.filter(patient_name=pat_name).first()
+        doc_obj = Doctor.objects.get(pk=doc_name)
+
+        consult_obj = Consult(patient_name=pat_obj, doctor_name=doc_obj, description=desc, tablets=tabs, tests=test, file=fp)
+
+
+        app_obj = Appointment.objects.filter(patient_name=pat_obj)
+
+        print(request.user.username,"----------------------------------------------")
+        print(doc_name,"----------------------------------------------")
+
+        if consult_obj and app_obj  :
+            if request.user.username == doc_name:
+                consult_obj.save()
+                app_obj.delete()
+                return f'Patient {pat_name} is consulted by doctor {doc_name}'
+            else:
+                return f'Patient {pat_name} does not booked appointment with Doctor {doc_name}'
+            
+        return f'Invalid consult fields or wrong Appointment .'

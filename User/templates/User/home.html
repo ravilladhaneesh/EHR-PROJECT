@@ -35,6 +35,7 @@
                                     <a class="nav-item nav-link" href="{% url 'appointment-patient' %}">Your Patients</a>
                                 {% endif %}
                                 <a class="nav-item nav-link" href="{% url 'logout'%}">Logout</a>
+                                <!-- <a class="nav-item nav-link" href="{% url 'profile'%}">Profile</a> -->
                             {% else %}
                                 <a class="nav-item nav-link" href="{% url 'login'%}">Login</a>
                                 <a class="nav-item nav-link" href="{% url 'patient-signup'%}">Register</a>
@@ -52,7 +53,6 @@
         </div>
     </header>
     
-    <div></div>
     <main class=" container my-5">
         {% block contents %}
             

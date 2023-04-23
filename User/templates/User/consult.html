@@ -1,0 +1,18 @@
+{% extends 'User/home.html'%}
+{% block contents%}
+{% load crispy_forms_tags %}
+<div class="container w-50">
+    <div class="content-section">
+        <form method="POST"  name="file" class="post-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" >Consult</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type = 'submit'> Submit </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock contents %}
