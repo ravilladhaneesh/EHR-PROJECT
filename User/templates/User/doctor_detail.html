@@ -1,0 +1,22 @@
+{% extends 'User/home.html'%}
+{% block contents%}
+<div class="container w-75 my-2  ">
+    <div class="container border my-3">
+        <div class="row" >
+            <div class="col-md">
+                <div class="h4"> <span class="text-muted"> Name :</span> <span class="h1"> {{ object.doctor_name}} </span>   </div>
+                <div class="h4"> <span class="text-muted"> Speciality :</span> {{ object.speciality }}  </div>
+                <div class="h4"> <span class="text-muted"> Gender :</span>
+                    {% if  object.gender  == "M" %}
+                        Male
+                    {% else %}
+                        Female
+                    {% endif %}
+                </div>
+                <div class="h4"> <span class="text-muted"> City :</span> {{ object.city }}  </div>
+                <div class="h4"> <span class="text-muted"> State :</span> {{ object.State }}  </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contents%}

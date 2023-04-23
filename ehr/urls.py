@@ -25,11 +25,16 @@ urlpatterns = [
     path("register/patient", user_views.PatientSignUpView.as_view(), name="patient-signup"),
     path('login/',auth_views.LoginView.as_view(template_name="User/login.html"), name="login"),
     path('logout/', auth_views.LogoutView.as_view(template_name="User/logout.html"), name="logout"),
+    path("appointment_patient/" , user_views.appointment_patient, name='appointment-patient'),
+    # path('appointment_patient/', user_views.Appointment_patient.as_view(), name='appointment-patient'),
     path('appointment/', user_views.book_appointment, name="book-appointment"),
     path('register/doctor', user_views.DoctorSignUpView.as_view() , name="doctor-signup"),
     path('dashboard/', user_views.dashboard, name='dashboard'),
     path('view_patients/', user_views.view_patients, name="view-patients"),
     path('view_doctors/', user_views.view_doctors, name="view-doctors"),
     path('view_appointments/', user_views.view_appointments, name="view-appointments"),
+    path('doctor/<str:pk>', user_views.DoctorDetailView.as_view(), name="doctor-detail"),
+    path('patient/<str:pk>', user_views.AppointmentDetialView.as_view(), name="appointment-detail"),
 ]
+
 

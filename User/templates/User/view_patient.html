@@ -1,0 +1,23 @@
+{% extends 'User/home.html' %}
+{% block contents %}
+<div class="h2">Patients you  <span class="text-muted"> ( {{user.username}} )</span> need to consult :  </div>
+{% for app in appointment %}
+        <div class="container border my-3">
+            <div class="row" >
+                <div class="col-md">
+                    <div class="h4"> <span class="text-muted"> Patient Name :</span> <span class="h4">  <a href="{% url 'appointment-detail' app.id %}">{{ app.patient_name}} </a> </span></div>
+                    <!-- <div class="h4"> <span class="text-muted"> Doctor Name :</span> <span class="h3">{{ app.doctor_name}} </span></div> -->
+                    <!-- <div class="h4"> <span class="text-muted"> Speciality :</span> {{ app.doctor_name.speciality}} </div> -->
+                    <div class="h4"> <span class="text-muted"> Date :</span> {{ app.date }}  </div>
+                    <!-- <div class="h4"> <span class="text-muted"> Time :</span> {{ app.time }}  </div> -->
+                </div>
+            </div>
+        </div>
+        
+{% endfor %}
+{% endblock contents%}
+
+
+<!-- {% if user_name.username == app.doctor_name.doctor_name %} -->
+
+<!-- {% endif %} -->

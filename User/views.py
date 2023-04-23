@@ -5,10 +5,11 @@ from django.contrib.auth import login
 from django.views.generic import CreateView
 from .models import User
 from django.contrib.auth.decorators import login_required
-from .decorators import patient_required, admin_required
+from .decorators import patient_required, admin_required, doctor_required
 from django.utils.decorators import method_decorator
 from .models import Doctor, Patient, Appointment
-
+from django.views.generic import DetailView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
 
 def home(request):
@@ -55,17 +56,19 @@ class PatientSignUpView(CreateView):
 @patient_required
 def book_appointment(request):
     if request.method == "POST":
-        form = AppointmentForm(request.POST)
+        form = AppointmentForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
-            patient_name = form.cleaned_data.get('patient_name')
-            messages.success(request,f'Appointment booked for {patient_name}')
+            doctor_name = form.cleaned_data.get('doctor_name')
+            messages.success(request,f'Appointment booked for {doctor_name}')
             return redirect('main-home')
     else:
         form = AppointmentForm()
     
     return render(request, 'User/register.html', {"form": form})
         
+
+
 
 @method_decorator(login_required, name="dispatch")
 @method_decorator(admin_required, name="dispatch")
@@ -124,3 +127,22 @@ def view_appointments(request):
     }
 
     return render(request, 'User/appointments.html', context)
+
+
+
+class DoctorDetailView(LoginRequiredMixin, DetailView):
+    model = Doctor
+
+@login_required
+@doctor_required
+def appointment_patient(request):
+    context = {
+        'appointment': Appointment.objects.filter(doctor_name=request.user.username),
+        # 'user_name' : request.user,
+    }
+    return render(request, 'User/view_patient.html', context )
+
+
+class AppointmentDetialView(LoginRequiredMixin , DetailView):
+    model =  Appointment
+    

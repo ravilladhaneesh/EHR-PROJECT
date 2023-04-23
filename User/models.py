@@ -41,9 +41,16 @@ class Doctor(models.Model):
 
 class Appointment(models.Model):
     
+    patient_name = models.ForeignKey(User, on_delete=models.CASCADE)
     doctor_name = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
 
     def __str__(self):
-        return f' {self.doctor_name}'
+        return f'{self.doctor_name}'
+    
+
+
+# class consult(models.Model):
+
+#     description = models.CharField(max_length=200)

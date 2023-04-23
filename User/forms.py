@@ -72,8 +72,26 @@ class AppointmentForm(forms.Form):
 
     
     doctor_name = forms.CharField(max_length=20)
-    date = forms.DateField()
-    time = forms.TimeField()
+    date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                    'placeholder': 'YYYY-MM-DD', 'required': 'required'
+                  }
+            )
+        )
+    time = forms.TimeField(
+        widget=forms.DateInput(
+            attrs={
+                    'placeholder': 'HH:MM:SS', 'required': 'required'
+                  }
+            )
+        )
+
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(AppointmentForm, self).__init__(*args, **kwargs)
+
 
     class Meta:
         model = Appointment
@@ -82,10 +100,10 @@ class AppointmentForm(forms.Form):
         data = self.cleaned_data
 
         doc_name = data["doctor_name"]
-        print("----------------------------",doc_name)
         app_date = data["date"]
         app_time = data["time"]
         doc_obj = Doctor.objects.get(pk=doc_name)
-        print("----------------------",doc_obj)
-        appointment_record = Appointment(doctor_name=doc_obj, date=app_date, time=app_time)
+        print("-------------------------------------------------",self.user)
+        
+        appointment_record = Appointment(patient_name=self.user, doctor_name=doc_obj, date=app_date, time=app_time)
         appointment_record.save()

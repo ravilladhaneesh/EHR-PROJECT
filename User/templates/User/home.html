@@ -12,7 +12,7 @@
     
     <header class=" site-header">
         <div class="container-md mb-3">
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark  ">
+            <nav class="navbar navbar-expand-md navbar-dark bg-secondary ">
                 <div class="container">
                     <a class="navbar-brand mr-4" href="{% url 'main-home' %}">EHR</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@
                                 {% elif user.is_patient %}
                                     <a class="nav-item nav-link" href="{%url 'book-appointment' %}">Appointment</a>
                                 {% elif user.is_doctor %}
-                                    <a class="nav-item nav-link" href="#">View Patients</a>
+                                    <a class="nav-item nav-link" href="{% url 'appointment-patient' %}">Your Patients</a>
                                 {% endif %}
                                 <a class="nav-item nav-link" href="{% url 'logout'%}">Logout</a>
                             {% else %}
