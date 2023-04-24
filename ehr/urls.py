@@ -39,6 +39,7 @@ urlpatterns = [
     path('patient/<str:pk>', user_views.AppointmentDetialView.as_view(), name="appointment-detail"),
     # path("consult/", user_views.ConsultCreateView.as_view(), name='consult-patient'),
     path("consult/", user_views.consult_patient, name='consult-patient'),
+    path("view_patient_record/", user_views.view_patient_record, name="view-patient-record"),
 ]
 
 

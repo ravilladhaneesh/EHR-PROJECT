@@ -1,15 +1,15 @@
 {% load crispy_forms_tags %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
- 
+    <link rel="stylesheet" href="{% static 'User/main.css' %}">
     <title>Home</title>
 </head>
-<body>
-    
+<body id="bg" >
     <header class=" site-header">
         <div class="container-md mb-3">
             <nav class="navbar navbar-expand-md navbar-dark bg-secondary ">
@@ -31,11 +31,12 @@
                                     <a class="nav-item nav-link" href="{% url 'doctor-signup'%}">Add Doctor</a>
                                 {% elif user.is_patient %}
                                     <a class="nav-item nav-link" href="{%url 'book-appointment' %}">Appointment</a>
+                                    <a class="nav-item nav-link" href="{% url 'view-patient-record'%}">My Records</a>
                                 {% elif user.is_doctor %}
                                     <a class="nav-item nav-link" href="{% url 'appointment-patient' %}">Your Patients</a>
                                 {% endif %}
                                 <a class="nav-item nav-link" href="{% url 'logout'%}">Logout</a>
-                                <!-- <a class="nav-item nav-link" href="{% url 'profile'%}">Profile</a> -->
+                                
                             {% else %}
                                 <a class="nav-item nav-link" href="{% url 'login'%}">Login</a>
                                 <a class="nav-item nav-link" href="{% url 'patient-signup'%}">Register</a>

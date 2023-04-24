@@ -45,7 +45,11 @@ class DoctorSignUpForm(UserCreationForm):
     speciality = forms.CharField(max_length=20)
     city = forms.CharField(max_length=20)
     State = forms.CharField(max_length=20)
-    date_of_joining = forms.DateField()
+    date_of_joining = forms.DateField(widget=forms.DateInput(
+            attrs={
+                    'placeholder': 'YYYY-MM-DD', 'required': 'required'
+                  }
+            ))
     
     class Meta(UserCreationForm.Meta):
         model = User

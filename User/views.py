@@ -173,3 +173,14 @@ def consult_patient(request):
 
     return render(request, "User/consult.html", {"form": form})
         
+
+
+@login_required
+@patient_required
+def view_patient_record(request):
+    user = request.user.username
+    context = {
+        'consult': Consult.objects.filter(patient_name=user)
+    }
+
+    return render(request, 'User/view_patient_record.html', context )

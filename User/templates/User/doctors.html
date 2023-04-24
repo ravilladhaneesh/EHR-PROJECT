@@ -1,11 +1,12 @@
 {% extends 'User/home.html'%}
 {% block contents%}
-<div class="container w-75 my-2  ">
+{% load static%}
+<div class="container w-75 my-2 ">
     {% for doc in doctor %}
-        <div class="container border my-3">
+        <div class="container border border-dark my-3">
             <div class="row" >
                 <div class="col-md">
-                    <div class="h4"> <span class="text-muted"> Name :</span> <span class="h1"><a  href="{% url 'doctor-detail' doc.doctor_name %}">{{ doc.doctor_name}}</a> </span>   </div>
+                    <div class="h4"> <span class="text-muted"> Name :</span> <span class="h1"><a class="text-dark"  href="{% url 'doctor-detail' doc.doctor_name %}">{{ doc.doctor_name}}</a> </span>   </div>
                     <div class="h4"> <span class="text-muted"> Speciality :</span> {{ doc.speciality }}  </div>
                     <div class="h4"> <span class="text-muted"> Gender :</span>
                         {% if  doc.gender  == "M" %}
