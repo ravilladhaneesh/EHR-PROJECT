@@ -33,7 +33,7 @@
                                     <a class="nav-item nav-link" href="{%url 'book-appointment' %}">Appointment</a>
                                     <a class="nav-item nav-link" href="{% url 'view-patient-record'%}">My Records</a>
                                 {% elif user.is_doctor %}
-                                    <a class="nav-item nav-link" href="{% url 'appointment-patient' %}">Your Patients</a>
+                                    <a class="nav-item nav-link" href="{% url 'appointment-patient' %}">View Patients</a>
                                 {% endif %}
                                 <a class="nav-item nav-link" href="{% url 'logout'%}">Logout</a>
                                 
@@ -52,6 +52,7 @@
                 {% endfor %}
             {%endif %}
         </div>
+        
     </header>
     
     <main class=" container my-5">

@@ -1,0 +1,25 @@
+{% extends 'User/home.html' %}
+{% block contents %}
+    <h1>Search Results : </h1>
+    <hr class=" border border-dark">
+    
+    <div class="h2 my-4">Patient Name :  <span class="h2 text-info">  {{request.GET.patient_name}} </span> </div>   
+    {% for record in object_list %}
+        <div class="container border my-3">
+            <div class="row" >
+                <div class="col-md">
+                    <div class="h4"> <span class="text-muted"> Doctor Name :</span> <span class="h4">  <a class=" h3 text-dark" href="{%url 'doctor-detail' record.doctor_name %}">{{ record.doctor_name }} </a> </span></div>
+                    <div class="h4"> <span class="text-muted"> Description :</span> <span class="h4">{{ record.description }} </span></div>
+                    {% if record.tablets %}
+                        <div class="h4"> <span class="text-muted"> Tablets :</span> {{ record.tablets }} </div>
+                    {% endif %}
+                    {% if record.tests %}
+                        <div class="h4"> <span class="text-muted"> Tests :</span> {{ record.tests }}  </div>
+                    {% endif %}
+                    <div class="h4"> <span class="text-muted"> File :</span> <a class="btn btn-secondary  border border-dark text-light" , href="{{ record.file.url }}">See file</a>  </div>
+                </div>
+            </div>
+        </div>
+        
+{% endfor %}
+{% endblock contents%}

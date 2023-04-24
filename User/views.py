@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm, PatientSignUpForm, DoctorSignUpForm, AppointmentForm, ConsultForm
+from .forms import  PatientSignUpForm, DoctorSignUpForm, AppointmentForm, ConsultForm
 from django.contrib import messages
-from django.contrib.auth import login
 from django.views.generic import CreateView
 from .models import User
 from django.contrib.auth.decorators import login_required
 from .decorators import patient_required, admin_required, doctor_required
 from django.utils.decorators import method_decorator
 from .models import Doctor, Patient, Appointment, Consult
-from django.views.generic import DetailView, ListView , View
+from django.views.generic import DetailView, ListView 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Create your views here.
 
@@ -184,3 +183,19 @@ def view_patient_record(request):
     }
 
     return render(request, 'User/view_patient_record.html', context )
+
+
+@method_decorator(login_required, name="dispatch")
+@method_decorator(doctor_required, name="dispatch")
+class SearchPatientRecord(ListView):
+    model = Consult
+    template_name = "User/search_patient_record.html"
+
+    def get_queryset(self) :
+        query = self.request.GET.get("patient_name")
+        # print(Patient.objects.get(patient_name=pat_name))
+        pat_obj = Patient.objects.get(patient_name=query)
+        object_list =  Consult.objects.filter(patient_name=pat_obj)
+        
+        # print(objects)
+        return object_list

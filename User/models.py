@@ -74,3 +74,4 @@ class Consult(models.Model):
 
     def __str__(self):
         return f'{self.patient_name} {self.id} file'
+    
